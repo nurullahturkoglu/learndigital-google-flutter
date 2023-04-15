@@ -19,7 +19,7 @@ class AsyncDownloadClass extends ConsumerWidget {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.download),
+              icon: const Icon(Icons.download),
               onPressed: () {
                 final posts = ref.read(userStateProvider.notifier).getPost();
               },
