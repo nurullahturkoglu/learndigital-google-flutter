@@ -39,7 +39,7 @@ class AsyncDownloadClass extends ConsumerWidget {
             },
           ),
           error: (error, stackTrace) => Text('An error occurred: $error'),
-          loading: () => CircularProgressIndicator(),
+          loading: () => const CircularProgressIndicator(),
         ),
       ),
     );
