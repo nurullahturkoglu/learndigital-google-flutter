@@ -7,6 +7,8 @@ import 'package:myapp/screens/await_download.dart';
 import 'package:myapp/screens/flutter_inputs.dart';
 import 'package:myapp/screens/images_example.dart';
 import 'package:myapp/screens/listview_examples.dart';
+import 'package:myapp/screens/login_ui.dart';
+import 'package:myapp/screens/test_inherited_widget.dart';
 import 'firebase/firebase_options.dart';
 import 'firebase/firebase_test.dart';
 
@@ -18,29 +20,6 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// // final helloWorldProvider = Provider((_) => 'Hello world from main');
-// final counter = StateProvider<String>((ref) => '1');
-
-// notifier provider example
-
-// // future provider ex. (family -> /users/$value )
-// final fetchUserProvider =
-//     FutureProvider.family.autoDispose((ref, String value) {
-//   final userRepository = ref.watch(userRepositoryProvider);
-//   return userRepository.fetchUser(value);
-// });
-
-// stream provider example
-
-// final someStreamProvider = StreamProvider((ref) async* {
-//   var allMessages = const <int>[];
-//   for (var i = 0; i < 10; i++) {
-//     await Future.delayed(Duration(seconds: 2));
-//     allMessages = [...allMessages, i];
-//     yield allMessages;
-//   }
-// });
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -51,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const FirebaseTest(),
+      home: const LoginUi(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -242,72 +221,5 @@ class YemekListesi extends StatelessWidget {
         for (final yemek in yemekListesi) Text(yemek),
       ],
     );
-  }
-}
-
-class Yemekler extends StatelessWidget {
-  const Yemekler({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      "Yemekler",
-      textScaleFactor: 2,
-    );
-  }
-}
-
-class Yazi extends StatelessWidget {
-  final String _benimYazim;
-  Yazi(this._benimYazim, {super.key}) {
-    print("statless");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("$_benimYazim");
-  }
-}
-
-class statefulYazi extends StatefulWidget {
-  final String _yazi;
-  final int _value;
-
-  statefulYazi(this._yazi, this._value, {super.key}) {
-    print("stateful const");
-  }
-
-  @override
-  State<statefulYazi> createState() => _statefulYaziState();
-}
-
-class _statefulYaziState extends State<statefulYazi> {
-  _statefulYaziState() {
-    print("sayi arttir state class const. oluştu");
-  }
-  @override
-  int _newCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _newCount = widget._value;
-  }
-
-  void sayiArttir() {
-    print("sayi arttir cagirildi");
-  }
-
-  Widget build(BuildContext context) {
-    print('render');
-    return ElevatedButton(
-        onPressed: () {
-          setState(() {
-            _newCount++;
-          });
-        },
-        child: Text("${widget._yazi} $_newCount"));
   }
 }
