@@ -1,15 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/flutter_inputs.dart';
-import 'package:myapp/listview_examples.dart';
 import 'package:myapp/auth/register.dart';
-import 'package:myapp/models/UserModel.dart';
 import 'package:myapp/repository/food_repository.dart';
-import 'package:myapp/repository/user_repository.dart';
-import 'await_download.dart';
-import 'images_example.dart';
+import 'package:myapp/screens/await_download.dart';
+import 'package:myapp/screens/flutter_inputs.dart';
+import 'package:myapp/screens/images_example.dart';
+import 'package:myapp/screens/listview_examples.dart';
+import 'firebase/firebase_options.dart';
+import 'firebase/firebase_test.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -46,7 +51,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const FirebaseTest(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -94,6 +99,16 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     YemekListesi(foods),
                     YemekEkle(ekleYemek),
                   ],
+                ),
+                ElevatedButton(
+                  child: const Text("Firebase test.."),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return const FirebaseTest();
+                      },
+                    ));
+                  },
                 ),
                 ElevatedButton(
                   child: const Text("Riverpod User Test..."),
