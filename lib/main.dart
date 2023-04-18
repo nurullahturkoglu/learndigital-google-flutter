@@ -81,11 +81,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 ElevatedButton(
                   child: const Text("Kayit ol..."),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return const RegisterPage();
-                      },
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const RegisterPage();
+                        },
+                      ),
+                    );
                   },
                 ),
                 ImagesExampleClass(

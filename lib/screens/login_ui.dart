@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/screens/register_ui.dart';
 import 'package:myapp/widgets/snackbars.dart';
 import '../palette.dart';
 import '../widgets/custom_login_textfield.dart';
@@ -94,7 +95,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           flex: 2,
                           child: WhiteButton(
                             text: 'Create Account',
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const RegisterScreen();
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

@@ -1,5 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/services/firebase_auth_methods.dart';
 import 'package:myapp/widgets/snackbars.dart';
 import '../palette.dart';
 import '../widgets/custom_login_textfield.dart';
@@ -18,77 +20,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _email = '';
   String _password = '';
 
-  handleFormSave() {
+  signUpUser() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _messengerKey.currentState!.showSnackBar(
-        snackBarTemplate('Register', ContentType.success),
-      );
+      await FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+          email: _email, password: _password, context: context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      scaffoldMessengerKey: _messengerKey,
-      home: Scaffold(
-        backgroundColor: Pallete.backgroundColor,
-        body: Center(
-          child: FractionallySizedBox(
-            heightFactor: 0.8,
-            widthFactor: 0.9, // color: Palette,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // const TopImage(),
-                    const SignInText(),
-                    LoginTextField(
-                      hintText: 'Email',
-                      isSecret: false,
-                      validator: (val) {
-                        if (!ExtString(val!).isValidEmail)
-                          return 'Enter valid email';
-                      },
-                      onSaved: (value) {
-                        _email = value;
-                      },
-                    ),
-                    LoginTextField(
-                      hintText: "Password",
-                      isSecret: true,
-                      validator: (val) {
-                        if (!ExtString(val!).isValidPassword)
-                          return 'Password need have minimum 8 character';
-                      },
-                      onSaved: (value) {
-                        _password = value;
-                      },
-                    ),
-                    SingInButton(
-                      buttonText: 'Sing in',
-                      onPressed: handleFormSave,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Flexible(
-                          flex: 2,
-                          child: GreyText(text: 'Do you have an account'),
+    return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
+      body: Center(
+        child: FractionallySizedBox(
+          heightFactor: 0.8,
+          widthFactor: 0.9, // color: Palette,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // const TopImage(),
+                  const SignInText(),
+                  LoginTextField(
+                    hintText: 'Email',
+                    isSecret: false,
+                    validator: (val) {
+                      if (!ExtString(val!).isValidEmail)
+                        return 'Enter valid email';
+                    },
+                    onSaved: (value) {
+                      _email = value;
+                    },
+                  ),
+                  LoginTextField(
+                    hintText: "Password",
+                    isSecret: true,
+                    validator: (val) {
+                      if (!ExtString(val!).isValidPassword)
+                        return 'Password need have minimum 8 character';
+                    },
+                    onSaved: (value) {
+                      _password = value;
+                    },
+                  ),
+                  SingInButton(
+                    buttonText: 'Sing in',
+                    onPressed: signUpUser,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Flexible(
+                        flex: 2,
+                        child: GreyText(text: 'Do you have an account'),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: WhiteButton(
+                          text: 'Log in',
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const LoginScreen();
+                                },
+                              ),
+                            );
+                          },
                         ),
-                        Flexible(
-                          flex: 2,
-                          child: WhiteButton(
-                            text: 'Log in',
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/palette.dart';
@@ -24,7 +25,10 @@ class _RegisterPageState extends State<RegisterPage> {
       print('$_fullName $_mail $_phone $_password');
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(AwesomeSnackBars().snackBarSuccess);
+        ..showSnackBar(snackBarTemplate(
+          "Succesfull register",
+          ContentType.success,
+        ));
     }
   }
 
