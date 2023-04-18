@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/widgets/snackbars.dart';
@@ -20,8 +21,9 @@ class _LoginScreenState extends State<LoginScreen> {
   handleFormSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _messengerKey.currentState!
-          .showSnackBar(AwesomeSnackBars().snackBarSuccess);
+      _messengerKey.currentState!.showSnackBar(
+        snackBarTemplate('Login', ContentType.success),
+      );
     }
   }
 
@@ -71,14 +73,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       isSecret: true,
                       validator: (val) {
                         if (!ExtString(val!).isValidPassword)
-                          return 'Enter valid password';
+                          return 'Password need have minimum 8 character';
                       },
                       onSaved: (value) {
                         _password = value;
                       },
                     ),
                     SingInButton(
-                      buttonText: 'Sing in',
+                      buttonText: 'Log in',
                       onPressed: handleFormSave,
                     ),
                     Row(
@@ -206,33 +208,6 @@ class SingInButton extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-extension ExtString on String {
-  bool get isValidEmail {
-    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    return emailRegExp.hasMatch(this);
-  }
-
-  bool get isValidName {
-    final nameRegExp =
-        RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
-    return nameRegExp.hasMatch(this);
-  }
-
-  bool get isValidPassword {
-    final passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
-    return passwordRegExp.hasMatch(this);
-  }
-
-  bool get isNotNull {
-    return this != null;
-  }
-
-  bool get isValidPhone {
-    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
-    return phoneRegExp.hasMatch(this);
   }
 }
 
