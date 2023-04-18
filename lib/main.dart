@@ -1,16 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myapp/auth/register.dart';
+import 'package:myapp/widgets/register.dart';
 import 'package:myapp/repository/food_repository.dart';
-import 'package:myapp/screens/await_download.dart';
 import 'package:myapp/screens/flutter_inputs.dart';
 import 'package:myapp/screens/images_example.dart';
 import 'package:myapp/screens/listview_examples.dart';
 import 'package:myapp/screens/login_ui.dart';
 import 'package:myapp/screens/test_inherited_widget.dart';
 import 'firebase/firebase_options.dart';
-import 'firebase/firebase_test.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,26 +76,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     YemekListesi(foods),
                     YemekEkle(ekleYemek),
                   ],
-                ),
-                ElevatedButton(
-                  child: const Text("Firebase test.."),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return const FirebaseTest();
-                      },
-                    ));
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text("Riverpod User Test..."),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return AsyncDownloadClass();
-                      },
-                    ));
-                  },
                 ),
                 ElevatedButton(
                   child: const Text("Kayit ol..."),

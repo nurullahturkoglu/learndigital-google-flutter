@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/palette.dart';
-import 'package:myapp/auth/custom_textfield.dart';
+import 'package:myapp/widgets/custom_textfield.dart';
 import 'package:myapp/widgets/snackbars.dart';
 
 class RegisterPage extends StatefulWidget {
