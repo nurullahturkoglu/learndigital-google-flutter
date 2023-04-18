@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/widgets/snackbars.dart';
 import '../palette.dart';
 import '../widgets/custom_login_textfield.dart';
 
@@ -19,8 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   handleFormSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print('$_email $_password');
-      _messengerKey.currentState!.showSnackBar(Pallete().snackBarSuccess);
+      _messengerKey.currentState!
+          .showSnackBar(AwesomeSnackBars().snackBarSuccess);
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/palette.dart';
 import 'package:myapp/auth/custom_textfield.dart';
+import 'package:myapp/widgets/snackbars.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
       print('$_fullName $_mail $_phone $_password');
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(Pallete().snackBarSuccess);
+        ..showSnackBar(AwesomeSnackBars().snackBarSuccess);
     }
   }
 

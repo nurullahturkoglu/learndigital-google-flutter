@@ -36,18 +36,4 @@ class Pallete {
       height: 20,
     ),
   );
-
-  final snackBarSuccess = SnackBar(
-    /// need to set following properties for best effect of awesome_snackbar_content
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'Successful!',
-      message: 'Congrulations! Successful register.',
-
-      /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-      contentType: ContentType.success,
-    ),
-  );
 }
