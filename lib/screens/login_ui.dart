@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../palette.dart';
+import '../widgets/custom_login_textfield.dart';
 
-class LoginUi extends StatelessWidget {
-  const LoginUi({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
+  String _email = '';
+  String _password = '';
+
+  handleFormSave() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print('$_email $_password');
+      _messengerKey.currentState!.showSnackBar(Pallete().snackBarSuccess);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: _messengerKey,
       home: Scaffold(
         backgroundColor: Pallete.backgroundColor,
         body: Center(
@@ -15,57 +35,78 @@ class LoginUi extends StatelessWidget {
             heightFactor: 0.8,
             widthFactor: 0.9, // color: Palette,
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // const TopImage(),
-                  const SignInText(),
-                  ContinueWithButton(
-                    buttonText: 'Continue with Google',
-                    icon: Pallete().googleSvgIcon,
-                  ),
-                  ContinueWithButton(
-                    buttonText: 'Continue with Facebook',
-                    icon: Pallete().facebookSvgIcon,
-                  ),
-                  const MidText(text: 'or'),
-                  const LoginTextField(
-                    hintText: 'Email',
-                    isSecret: false,
-                  ),
-                  const LoginTextField(
-                    hintText: "Password",
-                    isSecret: true,
-                  ),
-                  const SingInButton(
-                    buttonText: 'Sing in',
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Flexible(
-                        flex: 2,
-                        child: GreyText(text: 'Dont have an account?'),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: WhiteButton(
-                          text: 'Create Account',
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: WhiteButton(
-                      onPressed: () {},
-                      text: "Forgot Password?",
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // const TopImage(),
+                    const SignInText(),
+                    ContinueWithButton(
+                      buttonText: 'Continue with Google',
+                      icon: Pallete().googleSvgIcon,
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    ContinueWithButton(
+                      buttonText: 'Continue with Facebook',
+                      icon: Pallete().facebookSvgIcon,
+                    ),
+                    const MidText(text: 'or'),
+                    LoginTextField(
+                      hintText: 'Email',
+                      isSecret: false,
+                      validator: (val) {
+                        if (!ExtString(val!).isValidEmail)
+                          return 'Enter valid email';
+                      },
+                      onSaved: (value) {
+                        _email = value;
+                      },
+                    ),
+                    LoginTextField(
+                      hintText: "Password",
+                      isSecret: true,
+                      validator: (val) {
+                        if (!ExtString(val!).isValidPassword)
+                          return 'Enter valid password';
+                      },
+                      onSaved: (value) {
+                        _password = value;
+                      },
+                    ),
+                    SingInButton(
+                      buttonText: 'Sing in',
+                      onPressed: handleFormSave,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Flexible(
+                          flex: 2,
+                          child: GreyText(text: 'Dont have an account?'),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          child: WhiteButton(
+                            text: 'Create Account',
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: WhiteButton(
+                        onPressed: () {},
+                        text: "Forgot Password?",
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -124,9 +165,11 @@ class GreyText extends StatelessWidget {
 
 class SingInButton extends StatelessWidget {
   final String buttonText;
+  final Function() onPressed;
   const SingInButton({
     super.key,
     required this.buttonText,
+    required this.onPressed,
   });
 
   @override
@@ -151,7 +194,7 @@ class SingInButton extends StatelessWidget {
         ),
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: onPressed,
         child: Text(
           buttonText,
           style: const TextStyle(
@@ -165,50 +208,30 @@ class SingInButton extends StatelessWidget {
   }
 }
 
-class LoginTextField extends StatelessWidget {
-  final String hintText;
-  final bool isSecret;
-  const LoginTextField({
-    super.key,
-    required this.hintText,
-    required this.isSecret,
-  });
+extension ExtString on String {
+  bool get isValidEmail {
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return emailRegExp.hasMatch(this);
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: TextField(
-        style: const TextStyle(color: Pallete.whiteColor),
-        obscureText: isSecret ? true : false,
-        enableSuggestions: isSecret ? false : true,
-        autocorrect: isSecret ? false : true,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 15),
-          hintText: hintText,
-          hintStyle: TextStyle(
-              color: Pallete().fontColor, fontWeight: FontWeight.w500),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: Pallete.borderColor,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: Pallete.borderColor,
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-          ),
-        ),
-      ),
-    );
+  bool get isValidName {
+    final nameRegExp =
+        RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
+    return nameRegExp.hasMatch(this);
+  }
+
+  bool get isValidPassword {
+    final passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+    return passwordRegExp.hasMatch(this);
+  }
+
+  bool get isNotNull {
+    return this != null;
+  }
+
+  bool get isValidPhone {
+    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
+    return phoneRegExp.hasMatch(this);
   }
 }
 
@@ -247,31 +270,35 @@ class ContinueWithButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Pallete.borderColor,
-          width: 2,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(15),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          Text(
-            buttonText,
-            style: GoogleFonts.roboto(
-              fontSize: 18,
-              color: Pallete().fontColor,
-              fontWeight: FontWeight.bold,
-            ),
+    return InkWell(
+      onTap: () {
+        print("Click event on Container");
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Pallete.borderColor,
+            width: 2,
           ),
-        ],
+          borderRadius: const BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            Text(
+              buttonText,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+                color: Pallete().fontColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
