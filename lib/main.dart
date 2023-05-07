@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/screens/register_ui.dart';
 import 'package:myapp/widgets/register.dart';
@@ -29,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const RegisterScreen(),
+      home: MyHomePage(title: "Test"),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -90,9 +93,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     );
                   },
                 ),
-                ImagesExampleClass(
-                  imgUrl: 'images/chloe.jpg',
-                ),
                 ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
@@ -107,26 +107,68 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     ));
                   },
                 ),
-                ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.pink),
-                  ),
-                  child: const Text('Sipariş ver...'),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return InputTest(
-                          foodList: foods,
-                        );
-                      },
-                    ));
-                  },
-                ),
+                const AnimationWidget(),
               ],
             ),
           ),
         ));
+  }
+}
+
+class AnimationWidget extends StatefulWidget {
+  const AnimationWidget({super.key});
+
+  @override
+  State<AnimationWidget> createState() => _AnimationWidgetState();
+}
+
+class _AnimationWidgetState extends State<AnimationWidget>
+    with SingleTickerProviderStateMixin<AnimationWidget> {
+  @override
+  late Ticker _ticker;
+
+  double _dikeyKonum = 0.0;
+  void initState() {
+    // TODO: implement initState
+    Ticker _ticker = createTicker((Duration elapsed) {
+      final aci = pi *
+          elapsed.inMicroseconds /
+          const Duration(seconds: 1).inMicroseconds;
+      setState(() {
+        _dikeyKonum = cos(aci) * 30 + 30;
+      });
+    });
+    _ticker.start();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(_dikeyKonum),
+      child: ElevatedButton(
+        style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll<Color>(Colors.pink),
+        ),
+        child: const Text('Sipariş ver...'),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return InputTest(
+                foodList: foods,
+              );
+            },
+          ));
+        },
+      ),
+    );
   }
 }
 
