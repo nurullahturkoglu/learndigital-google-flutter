@@ -23,8 +23,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   signUpUser() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      await FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
-          email: _email, password: _password, context: context);
+      await FirebaseAuthMethods(FirebaseAuth.instance)
+          .signUpWithEmailAndPassword(
+              email: _email, password: _password, context: context);
     }
   }
 

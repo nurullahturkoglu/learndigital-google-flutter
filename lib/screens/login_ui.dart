@@ -1,7 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/screens/register_ui.dart';
+import 'package:myapp/services/firebase_auth_methods.dart';
 import 'package:myapp/widgets/snackbars.dart';
 import '../palette.dart';
 import '../widgets/custom_login_textfield.dart';
@@ -22,103 +24,99 @@ class _LoginScreenState extends State<LoginScreen> {
   handleFormSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _messengerKey.currentState!.showSnackBar(
-        snackBarTemplate('Login', ContentType.success),
-      );
+      FirebaseAuthMethods(FirebaseAuth.instance).signInWithEmailAndPassword(
+          email: _email, password: _password, context: context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      scaffoldMessengerKey: _messengerKey,
-      home: Scaffold(
-        backgroundColor: Pallete.backgroundColor,
-        body: Center(
-          child: FractionallySizedBox(
-            heightFactor: 0.8,
-            widthFactor: 0.9, // color: Palette,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // const TopImage(),
-                    const SignInText(),
-                    ContinueWithButton(
-                      buttonText: 'Continue with Google',
-                      icon: Pallete().googleSvgIcon,
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    ContinueWithButton(
-                      buttonText: 'Continue with Facebook',
-                      icon: Pallete().facebookSvgIcon,
-                    ),
-                    const MidText(text: 'or'),
-                    LoginTextField(
-                      hintText: 'Email',
-                      isSecret: false,
-                      validator: (val) {
-                        if (!ExtString(val!).isValidEmail)
-                          return 'Enter valid email';
-                      },
-                      onSaved: (value) {
-                        _email = value;
-                      },
-                    ),
-                    LoginTextField(
-                      hintText: "Password",
-                      isSecret: true,
-                      validator: (val) {
-                        if (!ExtString(val!).isValidPassword)
-                          return 'Password need have minimum 8 character';
-                      },
-                      onSaved: (value) {
-                        _password = value;
-                      },
-                    ),
-                    SingInButton(
-                      buttonText: 'Log in',
-                      onPressed: handleFormSave,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Flexible(
-                          flex: 2,
-                          child: GreyText(text: 'Dont have an account?'),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: WhiteButton(
-                            text: 'Create Account',
-                            onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const RegisterScreen();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: WhiteButton(
-                        onPressed: () {},
-                        text: "Forgot Password?",
+    return Scaffold(
+      backgroundColor: Pallete.backgroundColor,
+      body: Center(
+        child: FractionallySizedBox(
+          heightFactor: 0.8,
+          widthFactor: 0.9, // color: Palette,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // const TopImage(),
+                  const SignInText(),
+                  ContinueWithButton(
+                    buttonText: 'Continue with Google',
+                    icon: Pallete().googleSvgIcon,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ContinueWithButton(
+                    buttonText: 'Continue with Facebook',
+                    icon: Pallete().facebookSvgIcon,
+                  ),
+                  const MidText(text: 'or'),
+                  LoginTextField(
+                    hintText: 'Email',
+                    isSecret: false,
+                    validator: (val) {
+                      if (!ExtString(val!).isValidEmail)
+                        return 'Enter valid email';
+                    },
+                    onSaved: (value) {
+                      _email = value;
+                    },
+                  ),
+                  LoginTextField(
+                    hintText: "Password",
+                    isSecret: true,
+                    validator: (val) {
+                      if (!ExtString(val!).isValidPassword)
+                        return 'Password need have minimum 8 character';
+                    },
+                    onSaved: (value) {
+                      _password = value;
+                    },
+                  ),
+                  SingInButton(
+                    buttonText: 'Log in',
+                    onPressed: handleFormSave,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Flexible(
+                        flex: 2,
+                        child: GreyText(text: 'Dont have an account?'),
                       ),
+                      Flexible(
+                        flex: 2,
+                        child: WhiteButton(
+                          text: 'Create Account',
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const RegisterScreen();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: WhiteButton(
+                      onPressed: () {},
+                      text: "Forgot Password?",
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

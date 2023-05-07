@@ -8,7 +8,7 @@ class FirebaseAuthMethods {
   FirebaseAuthMethods(this._auth);
 
   // EMAIL Sign Up
-  Future<void> signUpWithEmail({
+  Future<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
     required BuildContext context,
@@ -24,7 +24,7 @@ class FirebaseAuthMethods {
     }
   }
 
-  sendMailVerification(BuildContext context) async {
+  Future<void> sendMailVerification(BuildContext context) async {
     try {
       _auth.currentUser!.sendEmailVerification();
       showSnackBar(
@@ -32,6 +32,25 @@ class FirebaseAuthMethods {
         'Email verification send.',
         ContentType.success,
       );
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message!, ContentType.failure);
+    }
+  }
+
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      //if logined user don't have email verified
+      if (!_auth.currentUser!.emailVerified) {
+        await sendMailVerification(context);
+      }
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!, ContentType.failure);
     }
