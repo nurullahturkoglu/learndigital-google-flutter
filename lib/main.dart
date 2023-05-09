@@ -12,6 +12,7 @@ import 'package:myapp/screens/images_example.dart';
 import 'package:myapp/screens/listview_examples.dart';
 import 'package:myapp/screens/login_ui.dart';
 import 'package:myapp/screens/test_inherited_widget.dart';
+import 'package:rive/rive.dart';
 import 'firebase/firebase_options.dart';
 
 Future<void> main() async {
@@ -92,6 +93,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       ),
                     );
                   },
+                ),
+                const SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: RiveAnimation.asset(
+                    'assets/animations/4224-8759-greedy-imp.riv',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 ElevatedButton(
                   style: const ButtonStyle(
