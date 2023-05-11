@@ -1,10 +1,8 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/screens/register_ui.dart';
 import 'package:myapp/services/firebase_auth_methods.dart';
-import 'package:myapp/widgets/snackbars.dart';
 import '../palette.dart';
 import '../widgets/custom_login_textfield.dart';
 
@@ -17,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
   String _email = '';
   String _password = '';
 
@@ -61,8 +58,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: 'Email',
                     isSecret: false,
                     validator: (val) {
-                      if (!ExtString(val!).isValidEmail)
+                      if (!ExtString(val!).isValidEmail) {
                         return 'Enter valid email';
+                      }
                     },
                     onSaved: (value) {
                       _email = value;
@@ -72,8 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "Password",
                     isSecret: true,
                     validator: (val) {
-                      if (!ExtString(val!).isValidPassword)
+                      if (!ExtString(val!).isValidPassword) {
                         return 'Password need have minimum 8 character';
+                      }
                     },
                     onSaved: (value) {
                       _password = value;
